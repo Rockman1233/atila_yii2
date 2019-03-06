@@ -2,12 +2,14 @@
 
 namespace app\module\admin\controllers;
 
+use app\models\ImageUpload;
 use Yii;
 use app\models\News;
 use app\models\SearchNews;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * NewsController implements the CRUD actions for News model.
@@ -67,11 +69,18 @@ class NewsController extends Controller
         $model = new News();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            $this->actionSetImage($model->id);
+
             return $this->redirect(['view', 'id' => $model->id]);
+
         }
+
+        $imageModel = new ImageUpload();
 
         return $this->render('create', [
             'model' => $model,
+            'imageModel' => $imageModel,
         ]);
     }
 
@@ -119,9 +128,41 @@ class NewsController extends Controller
     protected function findModel($id)
     {
         if (($model = News::findOne($id)) !== null) {
+
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionSetImage($id)
+    {
+        $model = new ImageUpload;
+
+        if(Yii::$app->request->isPost) {
+
+            //находим авто по ИД
+            $news = $this->findModel($id);
+
+            //вытягиваем картинку из ПОСТ
+            $file = UploadedFile::getInstance($model, 'image');
+
+            //берем у рассматриваемого авто существующую картинку
+            $currentImage = $news->pic_path;
+
+            //передаем на сохранение название текущего файла и загруженного файла (чтоб если что перезаписать)
+            $img_name = $model->UploadFile($file, $currentImage);
+
+            //если фото успешно записаось в модель делаем редирект
+            if($news->saveImage($img_name)) {
+
+                return $this->redirect(['view', 'id' => $news->id]);
+
+            }
+        }
+
+        //если фоточка не была загружена возвращаем к полю загрузки
+        return $this->render('image',['model'=>$model]);
+    }
+
 }

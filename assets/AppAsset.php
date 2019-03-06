@@ -24,7 +24,7 @@ class AppAsset extends AssetBundle
         'css/small-business.css',
     ];
     public $js = [
-        'js/small-business.js',
+        //'js/small-business.js',
         'js/SmoothScroll.js'
     ];
     public $depends = [

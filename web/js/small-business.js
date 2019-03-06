@@ -5,10 +5,10 @@
  */
 
 // Contact Form Scripts
-
+/*
 $(function() {
 
-    $("input,textarea").jqBootstrapValidation({
+    $('#contactForm').jqBootstrapValidation({
         preventSubmit: true,
         submitError: function($form, event, errors) {
             // additional error messages or events
