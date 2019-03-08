@@ -4,6 +4,7 @@
 
 $this->title = 'Кролевство нижнего белья';
 
+use yii\bootstrap\Carousel;
 use yii\helpers\Html; ?>
 
 <!-- Page Header -->
@@ -77,4 +78,23 @@ use yii\helpers\Html; ?>
             <a href="#">Older</a>
         </li>
     </ul> -->
+    <div class="container">
+        <?= Carousel::widget([
+            'items' => [
+                '<img class="img-responsive" src="/web/img/underwear.jpg" alt="">',
+                [
+                    'content' => '<img class="img-responsive" src="/web/img/homewear.jpg" alt="">',
+                    'options' => ['interval' => '600']
+                ],
+
+                [
+                    'content' => '<img class="img-responsive" src="/web/img/pizhamy_dlya_vsey_semi.jpg" alt="">',
+                    'caption' => '<h4>This is title</h4><p>This is the caption text</p>',
+                    'options' => ['interval' => '600']
+                ],
+            ],
+            'options' => ['class' => 'slide']
+        ]);
+        ?>
+    </div>
 </div>
